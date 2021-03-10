@@ -16,7 +16,7 @@ public class Field {
     }
 
     public Field(){
-       this(0);
+       this(false);
     }
 
     public void setStatusSquare(){
@@ -31,6 +31,10 @@ public class Field {
         this.status = FLAG;
     }
 
+    public void setStatusPop(){
+        this.status = (char) (this.getNearby()+'0');
+    }
+
     public char getStatus(){
         return(status);
     }
@@ -39,5 +43,8 @@ public class Field {
         return (bomb);
     }
 
+    public int getNearby(){
+        return(nearby);
+    }
 }
 

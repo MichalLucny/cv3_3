@@ -7,29 +7,38 @@ public class Board {
 
     private static final double PROBABILITY = 0.156;
 
-    private static final int BOARD_SIZE = 12;
+    public static final int BOARD_SIZE = 12;
 
     public Board (){
         playingBoard = new Field[BOARD_SIZE][BOARD_SIZE];
-        generateBoard(BOARD_SIZE);
-    }
 
-    private void generateBoard(int size){
         for (int i = 0;i<BOARD_SIZE;i++)
         {
             for (int j =0; j<BOARD_SIZE;j++)
             {
-                playingBoard[i][j].bomb= Randomizer.getRandomBoolean(PROBABILITY);
+                playingBoard[i][j]= new Field();
             }
         }
 
+        generateBoard();
+    }
 
-
+    private void generateBoard(){
+       for (int i = 0;i<BOARD_SIZE;i++)
+        {
             for (int j =0; j<BOARD_SIZE;j++)
             {
-
+                this.playingBoard[i][j].bomb= Randomizer.getRandomBoolean(15.6);
             }
+       }
 
+        for (int i = 0;i<BOARD_SIZE;i++)
+        {
+            for (int j =0; j<BOARD_SIZE;j++)
+            {
+                playingBoard[i][j].nearby= this.checkNearby(i,j);
+            }
+        }
 
     }
 
@@ -68,24 +77,106 @@ public class Board {
                 whatFieldIsThis=0;
             }
 
+            int amount=0;
           switch (whatFieldIsThis){
-              case 0: return (checkNearbyMiddle(row, column));break;
-              case 1:
+              case 0: amount=checkNearby0(row, column);break;
+              case 1:amount=checkNearby1(row, column);break;
+              case 2:amount=checkNearby2(row, column);break;
+              case 3:amount=checkNearby3(row, column);break;
+              case 4:amount=checkNearby4(row, column);break;
+              case 5:amount=checkNearby5(row, column);break;
+              case 6:amount=checkNearby6(row, column);break;
+              case 7:amount=checkNearby7(row, column);break;
+              case 8:amount=checkNearby8(row, column);break;
           }
-
-
+            
+        return(amount);
     }
 
-    private int checkNearbyMiddle (int row, int column){
-        int amount = 0;
+    private int checkNearby0 (int row, int column){
 
-        amount = amount + checkNearbyUtilUpperRow(row, column);
 
+        int amount;
+        amount = checkNearbyUtilUpperRow(row, column)
+                +checkNearbyUtilLowerRow(row, column)
+                +checkNearbyUtilMiddleLeftField(row, column)
+                +checkNearbyUtilMiddleRightField(row, column);
 
         return (amount);
     }
 
+    private int checkNearby1(int row, int column){
+        int amount;
+        amount = checkNearbyUtilDiagonalDownRightField(row, column)
+                +checkNearbyUtilMiddleRightField(row, column)
+                +checkNearbyUtilMiddleDownField(row, column);
 
+        return (amount);
+    }
+
+    private int checkNearby2(int row, int column){
+        int amount;
+        amount = checkNearbyUtilDiagonalDownLeftField(row, column)
+                +checkNearbyUtilMiddleLeftField(row, column)
+                +checkNearbyUtilMiddleDownField(row, column);
+
+        return (amount);
+    }
+
+    private int checkNearby3(int row, int column){
+        int amount;
+        amount = checkNearbyUtilDiagonalUpLeftField(row, column)
+                +checkNearbyUtilMiddleLeftField(row, column)
+                +checkNearbyUtilMiddleUpField(row, column);
+
+        return (amount);
+    }
+
+    private int checkNearby4(int row, int column){
+        int amount;
+        amount = checkNearbyUtilDiagonalUpRightField(row, column)
+                +checkNearbyUtilMiddleRightField(row, column)
+                +checkNearbyUtilMiddleUpField(row, column);
+
+        return (amount);
+    }
+
+    private int checkNearby5(int row, int column){
+        int amount;
+        amount = checkNearbyUtilLowerRow(row, column)
+                +checkNearbyUtilMiddleRightField(row, column)
+                +checkNearbyUtilMiddleLeftField(row, column);
+
+        return (amount);
+    }
+
+    private int checkNearby6(int row, int column){
+        int amount;
+        amount = checkNearbyUtilLeftColumn(row, column)
+                +checkNearbyUtilMiddleUpField(row, column)
+                +checkNearbyUtilMiddleDownField(row, column);
+
+        return (amount);
+    }
+
+    private int checkNearby7(int row, int column){
+        int amount;
+        amount = checkNearbyUtilUpperRow(row, column)
+                +checkNearbyUtilMiddleLeftField(row, column)
+                +checkNearbyUtilMiddleRightField(row, column);
+
+        return (amount);
+    }
+
+    private int checkNearby8(int row, int column){
+        int amount;
+        amount = checkNearbyUtilRightColumn(row, column)
+                +checkNearbyUtilMiddleUpField(row, column)
+                +checkNearbyUtilMiddleDownField(row, column);
+
+        return (amount);
+    }
+    
     private int checkNearbyUtilUpperRow(int row, int column){
         int k;
         k = checkNearbyUtilDiagonalUpLeftField(row, column)+checkNearbyUtilDiagonalUpRightField(row,column)+checkNearbyUtilMiddleUpField(row, column);
@@ -104,9 +195,9 @@ public class Board {
         return(k);
     }
 
-    private int checkNearbyUtilLeftColumn (int row, int column){
+    private int checkNearbyUtilRightColumn (int row, int column){
         int k;
-        k=checkNearbyUtilDiagonalDownLeftField(row,column)+checkNearbyUtilMiddleLeftField(row, column)+checkNearbyUtilDiagonalUpLeftField(row, column);
+        k=checkNearbyUtilDiagonalDownRightField(row,column)+checkNearbyUtilMiddleRightField(row, column)+checkNearbyUtilDiagonalUpRightField(row, column);
         return(k);
     }
 
