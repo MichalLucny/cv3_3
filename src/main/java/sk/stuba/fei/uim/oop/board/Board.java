@@ -4,14 +4,14 @@ import sk.stuba.fei.uim.oop.utility.Randomizer;
 
 public class Board {
     public Field[][] playingBoard;
-
+    public boolean exploded;
     private static final double PROBABILITY = 0.156;
 
     public static final int BOARD_SIZE = 12;
 
     public Board (){
         playingBoard = new Field[BOARD_SIZE][BOARD_SIZE];
-
+        exploded = false;
         for (int i = 0;i<BOARD_SIZE;i++)
         {
             for (int j =0; j<BOARD_SIZE;j++)
@@ -40,6 +40,50 @@ public class Board {
             }
         }
 
+    }
+
+    public void flagField(int row, int column){
+        this.playingBoard[row][column].flagThisField();
+    }
+
+    public void clickField(int row, int column){
+        this.playingBoard[row][column].popThisField();
+        if (this.playingBoard[row][column].didExplode()==true)
+            this.explode();
+    }
+
+    public void explode(){
+        this.exploded=true;
+        for (int i = 0;i<BOARD_SIZE;i++)
+        {
+            for (int j =0; j<BOARD_SIZE;j++)
+            {
+                this.playingBoard[i][j].popThisField();
+            }
+        }
+    }
+
+    public boolean isSolved(){
+       int k=0;
+        for (int i = 0;i<BOARD_SIZE;i++)
+        {
+            for (int j =0; j<BOARD_SIZE;j++)
+            {
+               if ((this.playingBoard[i][j].isBomb()==true)&&(this.playingBoard[i][j].isFlag()==false))
+               {
+                   k=k+1;
+               }
+            }
+        }
+
+        if (k==0)
+            return (true);
+        else
+            return (false);
+    }
+
+    public boolean isExploded(){
+        return (exploded);
     }
 
     private int checkNearby(int row, int column){
@@ -239,7 +283,7 @@ public class Board {
     }
     private int checkNearbyUtilDiagonalDownLeftField(int row, int column){
 
-        if (this.playingBoard[row+1][column].bomb)
+        if (this.playingBoard[row+1][column-1].bomb)
             return(1);
         else return (0);
     }

@@ -31,9 +31,26 @@ public class Field {
         this.status = FLAG;
     }
 
-    public void setStatusPop(){
+    public void setStatusNumber(){
         this.status = (char) (this.getNearby()+'0');
     }
+    public void flagThisField(){
+        if (this.getStatus()==FLAG)
+            setStatusSquare();
+        else
+            setStatusFlag();
+    }
+
+    public void popThisField(){
+        if (this.isFlag()==false) {
+          if (this.isBomb()!=true)
+              this.setStatusNumber();
+           else
+              this.setStatusMine();
+
+        }
+    }
+
 
     public char getStatus(){
         return(status);
@@ -43,8 +60,26 @@ public class Field {
         return (bomb);
     }
 
+    public boolean isFlag(){
+        if (this.getStatus()==FLAG) return (true);
+        else
+            return (false);
+    }
+
+    public boolean didExplode(){
+        if (this.getStatus()==MINE) return (true);
+        else
+            return (false);
+    }
+
+    public boolean isBomb(){
+        return(this.getBomb());
+    }
+
     public int getNearby(){
         return(nearby);
     }
+
+
 }
 
